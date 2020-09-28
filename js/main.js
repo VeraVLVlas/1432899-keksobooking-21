@@ -19,7 +19,7 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 15,
+    "x": 405,
     "y": 130
   }
 },
@@ -42,8 +42,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 30,
-    "y": 135
+    "x": 230,
+    "y": 35
   }
 },
 {
@@ -64,8 +64,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 40,
-    "y": 155
+    "x": 50,
+    "y": 55
   }
 },
 {
@@ -86,8 +86,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 50,
-    "y": 175
+    "x": -300,
+    "y": -75
   }
 },
 {
@@ -108,7 +108,7 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 60,
+    "x": -60,
     "y": 195
   }
 },
@@ -130,8 +130,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 70,
-    "y": 215
+    "x": -550,
+    "y": -200
   }
 },
 {
@@ -152,8 +152,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 80,
-    "y": 295
+    "x": -350,
+    "y": 95
   }
 },
 {
@@ -174,8 +174,8 @@ const advertiser = [{
     "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
   },
   "location": {
-    "x": 100,
-    "y": 495
+    "x": 300,
+    "y": 895
   }
 }
 ];
@@ -200,7 +200,7 @@ const makeElement = function (tagName, className, text) {
 // Создаем объявление
 const tenantAnnouncement = function (mapPin) {
   const listItem = makeElement('button', 'map__pin');
-  listItem.style = 'left:{location.x + 570}px; top:{location.y + 375}px;';
+  listItem.style = `left:${mapPin.location.x + 570}px; top:${mapPin.location.y + 375}px`;
 
   const picture = makeElement('img');
   picture.src = mapPin.author.avatar;
