@@ -1,222 +1,79 @@
 'use strict';
+// объявили переменные с данными объектов
+const avatarAuthor = [`img/avatars/user01.png`, `img/avatars/user02.png`, `img/avatars/user03.png`, `img/avatars/user04.png`, `img/avatars/user05.png`, `img/avatars/user06.png`, `img/avatars/user07.png`, `img/avatars/user08.png`];
+const titleAuthor = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
+const addressAuthor = [`600,350`, `820,210`, `100,100`, `50,400`, `500,20`, `600,10`, `40,760`, `140,200`];
+const priceAuthor = [1000, 2500, 3200, 1400, 4500, 1600, 1100];
+const typePremises = [`palace`, `flat`, `house`, `bungalow`];
+const roomsPremises = [1, 2, 3, 4];
+const numberGuests = [1, 2, 3, 4, 5];
+// const checkTime = [12:00, 13:00, 14:00]; выдает ошибку о неизвестном токене :
+// const checkoutTime = [12:00, 13:00, 14:00];
+const facilities = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const additionally = [`Большая лоджия`, `Вы вернетесь сюда снова`, `Минибар включен в стоимость`, `можно заехать с животными`, `есть парковка`, `есть детская комната`, `просторные комнаты`, `с домашним кинотеатром`];
+const photoRooms = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const locationByX = [1000, 420, 690, 844, 1320, 20, 140];
+const locationByY = [130, 270, 369, 456, 582, 630];
 
-// Массив из 8 сгенерированных JS объектов
-const advertiser = [{
-  "author": {
-    "avatar": 'img/avatars/user01.png'
-  },
-  "offer": {
-    "title": 'предложениe первое',
-    "address": '600,350',
-    "price": 1500,
-    "type": 'palace',
-    "rooms": 1,
-    "guests": 1,
-    "checkin": '12:00',
-    "checkout": '12:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": 405,
-    "y": 130
-  }
-},
-
-{
-  "author": {
-    "avatar": 'img/avatars/user02.png'
-  },
-  "offer": {
-    "title": 'предложениe второе',
-    "address": '600,320',
-    "price": 1600,
-    "type": 'flat',
-    "rooms": 2,
-    "guests": 2,
-    "checkin": '13:00',
-    "checkout": '13:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": 230,
-    "y": 35
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user03.png'
-  },
-  "offer": {
-    "title": 'предложениe третье',
-    "address": '590,300',
-    "price": 1750,
-    "type": 'house',
-    "rooms": 3,
-    "guests": 4,
-    "checkin": '14:00',
-    "checkout": '14:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": 50,
-    "y": 55
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user04.png'
-  },
-  "offer": {
-    "title": 'предложениe четвертое',
-    "address": '550,300',
-    "price": 1900,
-    "type": 'bungalow',
-    "rooms": 4,
-    "guests": 5,
-    "checkin": '12:00',
-    "checkout": '13:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": -300,
-    "y": -75
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user05.png'
-  },
-  "offer": {
-    "title": 'предложениe пятое',
-    "address": '540,270',
-    "price": 2100,
-    "type": 'palace',
-    "rooms": 5,
-    "guests": 6,
-    "checkin": '13:00',
-    "checkout": '12:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": -60,
-    "y": 195
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user06.png'
-  },
-  "offer": {
-    "title": 'предложениe шестое',
-    "address": '510,250',
-    "price": 2250,
-    "type": 'flat',
-    "rooms": 2,
-    "guests": 4,
-    "checkin": '14:00',
-    "checkout": '14:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": -550,
-    "y": -200
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user07.png'
-  },
-  "offer": {
-    "title": 'предложениe седьмое',
-    "address": '485,230',
-    "price": 2550,
-    "type": 'house',
-    "rooms": 4,
-    "guests": 2,
-    "checkin": '12:00',
-    "checkout": '14:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": -350,
-    "y": 95
-  }
-},
-{
-  "author": {
-    "avatar": 'img/avatars/user08.png'
-  },
-  "offer": {
-    "title": 'предложениe восьмое',
-    "address": '445,200',
-    "price": 3750,
-    "type": 'bungalow',
-    "rooms": 6,
-    "guests": 6,
-    "checkin": '14:00',
-    "checkout": '12:00',
-    "features": ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"],
-    "description": 'Лучшее на рынке горячее предложениe!',
-    "photos": ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"]
-  },
-  "location": {
-    "x": 300,
-    "y": 895
-  }
-}
-];
 // Убрали класс который скрывает интерактивность карты
-const map = document.querySelector('.map');
-map.classList.remove('map--faded');
+const map = document.querySelector(`.map`);
+map.classList.remove(`map--faded`);
+
+// пишем функцию для создания массива
+const generatedAd = function () {
+
+  return {
+    "author": {
+      "avatar": avatarAuthor [getRandomIntInclusive(0, avatarAuthor.length)]
+    },
+    "offer": {
+      "title": titleAuthor [getRandomIntInclusive(0, titleAuthor.length)],
+      "address": addressAuthor [getRandomIntInclusive(0, addressAuthor.length)],
+      "price": priceAuthor [getRandomIntInclusive(0, priceAuthor.length)],
+      "type": typePremises [getRandomIntInclusive(0, typePremises.length)],
+      "rooms": roomsPremises [getRandomIntInclusive(0, roomsPremises.length)],
+      "guests": numberGuests [getRandomIntInclusive(0, numberGuests.length)],
+      // "checkin": checkTime [getRandomIntInclusive(0, checkTime.length)],
+      // "checkout": checkoutTime [getRandomIntInclusive(0, checkoutTime.length)],
+      "features": facilities [getRandomIntInclusive(0, facilities.length)],
+      "description": additionally [getRandomIntInclusive(0, additionally.length)],
+      "photos": photoRooms [getRandomIntInclusive(0, photoRooms.length)]
+    },
+    "location": {
+      "x": locationByX [getRandomIntInclusive(0, locationByX.length)],
+      "y": locationByY [getRandomIntInclusive(0, locationByY.length)]
+    }
+  };
+};
+
+// пишем функцию для генерирования объектов
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 // Нашли шаблон метки
-const readyTemplate = document.querySelector('#pin').content;
-const templateData = readyTemplate.querySelector('.map__pin');
+const readyTemplate = document.querySelector(`#pin`).content;
+const pinButton = readyTemplate.querySelector(`.map__pin`);
+// Нашли див для вставки клонированной метки
+const blockForDrawing = document.querySelector(`.map__pins`);
+// Вставили элементы с помощью DocumentFragment.
+const fragment = document.createDocumentFragment();
 
-// Функция для передачи тега, класса, и текстового содержимого
-const makeElement = function (tagName, className, text) {
-  const element = document.createElement(tagName);
-  element.classList.add(className);
-  if (text) {
-    element.textContent = text;
-  }
-  return element;
-};
 
-// Создаем объявление
-const tenantAnnouncement = function (mapPin) {
-  const listItem = makeElement('button', 'map__pin');
-  listItem.style = `left:${mapPin.location.x + 570}px; top:${mapPin.location.y + 375}px`;
+// написали цикл для клонирования 8ми пинов
+for (const i = 1; i <= 8; i++) {
+  const clonedElement = pinButton.cloneNode(true);
+  clonedElement.style = `left:${location.x + 570}px; top:${location.y + 375}px`;
 
-  const picture = makeElement('img');
-  picture.src = mapPin.author.avatar;
-  picture.alt = mapPin.offer.title;
-  listItem.appendChild(picture);
+  const picture = pinButton.querySelector(`img`);
+  picture.src = generatedAd.author.avatar;
+  picture.alt = generatedAd.offer.title;
+  clonedElement.appendChild(picture);
 
-  return listItem;
-};
+  fragment.appendChild(clonedElement);
+}
 
-// Создаем функцию для отрисовки объявлении арендодателей
-const tenantСard = function (mapPins) {
-  const markupList = document.querySelector('.map__pins');
 
-  for (let i = 0; i < mapPins.length; i++) {
-    const readyAd = tenantAnnouncement(mapPins[i]);
-    markupList.appendChild(readyAd);
-  }
-};
-tenantСard(advertiser);
+blockForDrawing.appendChild(fragment);
