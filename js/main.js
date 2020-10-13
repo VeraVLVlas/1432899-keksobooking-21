@@ -1,79 +1,99 @@
 'use strict';
-// объявили переменные с данными объектов
-const avatarAuthor = [`img/avatars/user01.png`, `img/avatars/user02.png`, `img/avatars/user03.png`, `img/avatars/user04.png`, `img/avatars/user05.png`, `img/avatars/user06.png`, `img/avatars/user07.png`, `img/avatars/user08.png`];
-const titleAuthor = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
-const addressAuthor = [`600,350`, `820,210`, `100,100`, `50,400`, `500,20`, `600,10`, `40,760`, `140,200`];
-const priceAuthor = [1000, 2500, 3200, 1400, 4500, 1600, 1100];
-const typePremises = [`palace`, `flat`, `house`, `bungalow`];
-const roomsPremises = [1, 2, 3, 4];
-const numberGuests = [1, 2, 3, 4, 5];
-// const checkTime = [12:00, 13:00, 14:00]; выдает ошибку о неизвестном токене :
-// const checkoutTime = [12:00, 13:00, 14:00];
-const facilities = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const additionally = [`Большая лоджия`, `Вы вернетесь сюда снова`, `Минибар включен в стоимость`, `можно заехать с животными`, `есть парковка`, `есть детская комната`, `просторные комнаты`, `с домашним кинотеатром`];
-const photoRooms = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-const locationByX = [1000, 420, 690, 844, 1320, 20, 140];
-const locationByY = [130, 270, 369, 456, 582, 630];
 
-// Убрали класс который скрывает интерактивность карты
-const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
+// объявление констант
 
-// пишем функцию для создания массива
+const NUMBER_OF_ADS = 8;
+const TITLE_AUTHOR = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
+const ADDRESS_AUTHOR = [`600,350`, `820,210`, `100,100`, `50,400`, `500,20`, `600,10`, `40,760`, `140,200`];
+const PRICE_AUTHOR = [1000, 2500, 3200, 1400, 4500, 1600, 1100];
+const TYPE_PREMISES = [`palace`, `flat`, `house`, `bungalow`];
+const ROOMS_PREMISISS = [1, 2, 3, 4, 5, 6, 7, 8];
+const NUMBER_GUESTS = [1, 2, 3, 4, 5, 6, 7, 8];
+const CHECK_TIME = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT_TIME = [`12:00`, `13:00`, `14:00`];
+const FACILITIES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const ADDITIONALLY = [`Большая лоджия`, `Вы вернетесь сюда снова`, `Минибар включен в стоимость`, `можно заехать с животными`, `есть парковка`, `есть детская комната`, `просторные комнаты`, `с домашним кинотеатром`];
+const PHOTO_ROOMS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
+const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
+
+// Нашли шаблон метки
+const readyTemplatePin = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
+// Нашли див для вставки клонированной метки
+const blockForDrawing = document.querySelector(`.map__pins`);
+
+// описание функций (но не их вызов);
+// пишем функцию для случайного числа
+const getRandomIntInclusive = function (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// пишем функцию для генерирования случайного элемента в массив
+const randomElements = function (arr) {
+  return arr [getRandomIntInclusive(0, arr.length - 1)];
+};
+
+// пишем функцию для создания одного объявления
 const generatedAd = function () {
-
   return {
-    "author": {
-      "avatar": avatarAuthor [getRandomIntInclusive(0, avatarAuthor.length)]
+    'autor': {
+      'avatar': `img/avatars/user0${getRandomIntInclusive(1, 8)}.png`
     },
-    "offer": {
-      "title": titleAuthor [getRandomIntInclusive(0, titleAuthor.length)],
-      "address": addressAuthor [getRandomIntInclusive(0, addressAuthor.length)],
-      "price": priceAuthor [getRandomIntInclusive(0, priceAuthor.length)],
-      "type": typePremises [getRandomIntInclusive(0, typePremises.length)],
-      "rooms": roomsPremises [getRandomIntInclusive(0, roomsPremises.length)],
-      "guests": numberGuests [getRandomIntInclusive(0, numberGuests.length)],
-      // "checkin": checkTime [getRandomIntInclusive(0, checkTime.length)],
-      // "checkout": checkoutTime [getRandomIntInclusive(0, checkoutTime.length)],
-      "features": facilities [getRandomIntInclusive(0, facilities.length)],
-      "description": additionally [getRandomIntInclusive(0, additionally.length)],
-      "photos": photoRooms [getRandomIntInclusive(0, photoRooms.length)]
+    'offer': {
+      'title': randomElements(TITLE_AUTHOR),
+      'address': randomElements(ADDRESS_AUTHOR),
+      'price': randomElements(PRICE_AUTHOR),
+      'type': randomElements(TYPE_PREMISES),
+      'rooms': randomElements(ROOMS_PREMISISS),
+      'quests': randomElements(NUMBER_GUESTS),
+      'checkin': randomElements(CHECK_TIME),
+      'checkuot': randomElements(CHECKOUT_TIME),
+      'features': randomElements(FACILITIES),
+      'description': randomElements(ADDITIONALLY),
+      'photos': randomElements(PHOTO_ROOMS),
     },
-    "location": {
-      "x": locationByX [getRandomIntInclusive(0, locationByX.length)],
-      "y": locationByY [getRandomIntInclusive(0, locationByY.length)]
+    'location': {
+      'x': randomElements(LOCATION_BY_X),
+      'y': randomElements(LOCATION_BY_Y),
     }
   };
 };
 
-// пишем функцию для генерирования объектов
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+// функция для создание массива объявлений
+const weGenerateAds = function () {
+  const addPins = [];
+  for (let i = 0; i < NUMBER_OF_ADS; i++) {
+    addPins.push(generatedAd());
+  }
+  return addPins;
+};
 
-// Нашли шаблон метки
-const readyTemplate = document.querySelector(`#pin`).content;
-const pinButton = readyTemplate.querySelector(`.map__pin`);
-// Нашли див для вставки клонированной метки
-const blockForDrawing = document.querySelector(`.map__pins`);
-// Вставили элементы с помощью DocumentFragment.
-const fragment = document.createDocumentFragment();
+// const addPins = weGenerateAds();
 
+// Функция для создание DOM элемента из одного объекта объявления
 
-// написали цикл для клонирования 8ми пинов
-for (const i = 1; i <= 8; i++) {
-  const clonedElement = pinButton.cloneNode(true);
-  clonedElement.style = `left:${location.x + 570}px; top:${location.y + 375}px`;
+const clonedAds = function (newMapPin) {
+  const fragment = document.createDocumentFragment();
 
-  const picture = pinButton.querySelector(`img`);
-  picture.src = generatedAd.author.avatar;
-  picture.alt = generatedAd.offer.title;
-  clonedElement.appendChild(picture);
+  newMapPin.forEach(function (pinClone) {
+    const clonElement = readyTemplatePin.cloneNode(true);
+    const clonPictures = readyTemplatePin.querySelector(`img`);
+    clonElement.style = `left: ${pinClone.location.x}px; top: ${pinClone.location.y}px`;
+    clonPictures.src = `${pinClone.autor.avatar}`;
+    fragment.appendChild(clonElement);
+  });
+  blockForDrawing.appendChild(fragment);
+};
 
-  fragment.appendChild(clonedElement);
-}
+// объявление переменных для работы с данными (вызов функций);
+const itemDisplay = weGenerateAds();
+clonedAds(itemDisplay);
 
-
-blockForDrawing.appendChild(fragment);
+// Работа с ДОМ
+// Убрали класс который скрывает интерактивность карты
+const map = document.querySelector(`.map`);
+map.classList.remove(`map--faded`);
