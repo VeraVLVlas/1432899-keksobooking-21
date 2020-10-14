@@ -17,13 +17,6 @@ const PHOTO_ROOMS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http
 const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 
-// Нашли шаблон метки
-const readyTemplatePin = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
-// Нашли див для вставки клонированной метки
-const blockForDrawing = document.querySelector(`.map__pins`);
-
 // описание функций (но не их вызов);
 // пишем функцию для случайного числа
 const getRandomIntInclusive = function (min, max) {
@@ -73,25 +66,32 @@ const weGenerateAds = function () {
 };
 
 // const addPins = weGenerateAds();
+// появляется ошибка, т.к мы не используем переменную addPins, если её скрыть, ничего не меняется
+
+// Нашли шаблон метки
+const readyTemplatePin = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
 
 // Функция для создание DOM элемента из одного объекта объявления
-
-const clonedAds = function (newMapPin) {
+const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
 
   newMapPin.forEach(function (pinClone) {
-    const clonElement = readyTemplatePin.cloneNode(true);
-    const clonPictures = readyTemplatePin.querySelector(`img`);
+    const clonElement = template.cloneNode(true);
+    const clonPictures = clonElement.querySelector(`img`);
     clonElement.style = `left: ${pinClone.location.x}px; top: ${pinClone.location.y}px`;
     clonPictures.src = `${pinClone.autor.avatar}`;
     fragment.appendChild(clonElement);
   });
-  blockForDrawing.appendChild(fragment);
+  return fragment;
 };
 
+// Нашли див для вставки клонированной метки
+const blockForDrawing = document.querySelector(`.map__pins`);
 // объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
-clonedAds(itemDisplay);
+blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 
 // Работа с ДОМ
 // Убрали класс который скрывает интерактивность карты
