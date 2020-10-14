@@ -68,11 +68,6 @@ const weGenerateAds = function () {
 // const addPins = weGenerateAds();
 // появляется ошибка, т.к мы не используем переменную addPins, если её скрыть, ничего не меняется
 
-// Нашли шаблон метки
-const readyTemplatePin = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
-
 // Функция для создание DOM элемента из одного объекта объявления
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
@@ -86,6 +81,11 @@ const clonedAds = function (newMapPin, template) {
   });
   return fragment;
 };
+
+// Нашли шаблон метки
+const readyTemplatePin = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
 
 // Нашли див для вставки клонированной метки
 const blockForDrawing = document.querySelector(`.map__pins`);
