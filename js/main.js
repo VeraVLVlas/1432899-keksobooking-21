@@ -1,6 +1,6 @@
 'use strict';
 
-// объявление констант
+// объявление констант 1
 
 const NUMBER_OF_ADS = 8;
 const TITLE_AUTHOR = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
@@ -18,19 +18,19 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 
 // описание функций (но не их вызов);
-// пишем функцию для случайного числа
+// пишем функцию для случайного числа 1
 const getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// пишем функцию для генерирования случайного элемента в массив
+// пишем функцию для генерирования случайного элемента в массив 1
 const randomElements = function (arr) {
   return arr [getRandomIntInclusive(0, arr.length - 1)];
 };
 
-// пишем функцию для создания одного объявления
+// пишем функцию для создания одного объявления 1
 const generatedAd = function () {
   return {
     'autor': {
@@ -56,7 +56,7 @@ const generatedAd = function () {
   };
 };
 
-// функция для создание массива объявлений
+// функция для создание массива объявлений 1
 const weGenerateAds = function () {
   const addPins = [];
   for (let i = 0; i < NUMBER_OF_ADS; i++) {
@@ -68,7 +68,7 @@ const weGenerateAds = function () {
 // const addPins = weGenerateAds();
 // появляется ошибка, т.к мы не используем переменную addPins, если её скрыть, ничего не меняется
 
-// Функция для создание DOM элемента из одного объекта объявления
+// Функция для создание DOM элемента из одного объекта объявления 1
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
 
@@ -82,18 +82,56 @@ const clonedAds = function (newMapPin, template) {
   return fragment;
 };
 
-// Нашли шаблон метки
+// Нашли шаблон метки 1
 const readyTemplatePin = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 
-// Нашли див для вставки клонированной метки
+// Нашли див для вставки клонированной метки 1
 const blockForDrawing = document.querySelector(`.map__pins`);
 // объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
 blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 
-// Работа с ДОМ
-// Убрали класс который скрывает интерактивность карты
+// Работа с ДОМ 1
+// Убрали класс который скрывает интерактивность карты 1
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
+
+
+// Задание третье
+
+// Отрисуйте сгенерированные DOM-элементы в блок .map__pins. Для вставки элементов используйте DocumentFragment.
+// правильно лия поняла, что мы отрисовали эх ещё во втором задании?
+
+// найдем шаблон 2
+const templateCard = document.querySelector(`#card`)
+  .content
+  .querySelector(`.popup`);
+
+// создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
+const addingNewElements = function (advt) {
+  const cardFragment = document.createDocumentFragment();
+  const addingToAd = templateCard.cloneNode(true);
+  addingToAd.querySelector(`.popup__title`).textContent = advt.offer.title;
+  addingToAd.querySelector(`.popup__text--address`).textContent = advt.offer.address;
+  addingToAd.querySelector(`.popup__text--price`).textContent = `${advt.offer.price} ₽/ночь`;
+  addingToAd.querySelector(`.popup__type`).textContent = advt.offer.type;
+  addingToAd.querySelector(`.popup__text--capacity`).textContent = `${advt.offer.rooms} комнат для ${advt.offer.guests} гостей`;
+  addingToAd.querySelector(`.popup__text--time`).textContent = `Заезд после ${advt.offer.checkin} выезд до ${advt.offer.checkout}`;
+  addingToAd.querySelector(`.popup__features`).textContent = advt.offer.features;
+  addingToAd.querySelector(`.popup__description`).textContent = advt.offer.description;
+  addingToAd.querySelector(`.popup__photos`).src = advt.offer.photos;
+
+  //  КАК ЭТО СДЕЛАТЬ? Замените src у аватарки пользователя — изображения,
+  // которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
+
+  cardFragment.appendChild(addingToAd);
+
+  return cardFragment;
+};
+
+// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
+
+const mapContainer = map.querySelector(`.map__filters-container`);
+const newInsertedElement = map.insertBefore(addingNewElements(), mapContainer);
