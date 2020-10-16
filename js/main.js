@@ -1,6 +1,6 @@
 'use strict';
 
-// объявление констант 1
+// объявление констант
 
 const NUMBER_OF_ADS = 8;
 const TITLE_AUTHOR = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
@@ -18,7 +18,7 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 
 // описание функций (но не их вызов);
-// пишем функцию для случайного числа 1
+// пишем функцию для случайного числа
 const getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -30,7 +30,7 @@ const randomElements = function (arr) {
   return arr [getRandomIntInclusive(0, arr.length - 1)];
 };
 
-// пишем функцию для создания одного объявления 1
+// пишем функцию для создания одного объявления
 const generatedAd = function () {
   return {
     'autor': {
@@ -56,7 +56,9 @@ const generatedAd = function () {
   };
 };
 
-// функция для создание массива объявлений 1
+let generatedAdTemplate = generatedAd;
+
+// функция для создание массива объявлений
 const weGenerateAds = function () {
   const addPins = [];
   for (let i = 0; i < NUMBER_OF_ADS; i++) {
@@ -87,22 +89,19 @@ const readyTemplatePin = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 
-// Нашли див для вставки клонированной метки 1
+// Нашли див для вставки клонированной метки
 const blockForDrawing = document.querySelector(`.map__pins`);
 // объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
 blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 
 // Работа с ДОМ 1
-// Убрали класс который скрывает интерактивность карты 1
+// Убрали класс который скрывает интерактивность карты
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
 
 // Задание третье
-
-// Отрисуйте сгенерированные DOM-элементы в блок .map__pins. Для вставки элементов используйте DocumentFragment.
-// правильно лия поняла, что мы отрисовали эх ещё во втором задании?
 
 // найдем шаблон 2
 const templateCard = document.querySelector(`#card`)
@@ -110,21 +109,18 @@ const templateCard = document.querySelector(`#card`)
   .querySelector(`.popup`);
 
 // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-const addingNewElements = function (advt) {
+const addingNewElements = function (advt, pattern) {
   const cardFragment = document.createDocumentFragment();
-  const addingToAd = templateCard.cloneNode(true);
-  addingToAd.querySelector(`.popup__title`).textContent = advt.offer.title;
-  addingToAd.querySelector(`.popup__text--address`).textContent = advt.offer.address;
+  const addingToAd = pattern.cloneNode(true);
+  addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
+  addingToAd.querySelector(`.popup__text--address`).textContent = `${advt.offer.address}`;
   addingToAd.querySelector(`.popup__text--price`).textContent = `${advt.offer.price} ₽/ночь`;
-  addingToAd.querySelector(`.popup__type`).textContent = advt.offer.type;
-  addingToAd.querySelector(`.popup__text--capacity`).textContent = `${advt.offer.rooms} комнат для ${advt.offer.guests} гостей`;
-  addingToAd.querySelector(`.popup__text--time`).textContent = `Заезд после ${advt.offer.checkin} выезд до ${advt.offer.checkout}`;
-  addingToAd.querySelector(`.popup__features`).textContent = advt.offer.features;
-  addingToAd.querySelector(`.popup__description`).textContent = advt.offer.description;
-  addingToAd.querySelector(`.popup__photos`).src = advt.offer.photos;
-
-  //  КАК ЭТО СДЕЛАТЬ? Замените src у аватарки пользователя — изображения,
-  // которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
+  addingToAd.querySelector(`.popup__type`).textContent = `${advt.offer.type}`;
+  addingToAd.querySelector(`.popup__text--capacity`).textContent = `${advt.offer.rooms} комнат для ${advt.offer.quests} гостей`;
+  addingToAd.querySelector(`.popup__text--time`).textContent = `Заезд после ${advt.offer.checkin} выезд до ${advt.offer.checkuot}`;
+  addingToAd.querySelector(`.popup__features`).textContent = `${advt.offer.features}`;
+  addingToAd.querySelector(`.popup__description`).textContent = `${advt.offer.description}`;
+  addingToAd.querySelector(`.popup__photos img`).src = `${advt.offer.photos}`;
 
   cardFragment.appendChild(addingToAd);
 
@@ -134,4 +130,4 @@ const addingNewElements = function (advt) {
 // Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
 
 const mapContainer = map.querySelector(`.map__filters-container`);
-const newInsertedElement = map.insertBefore(addingNewElements(), mapContainer);
+map.insertBefore(addingNewElements(generatedAdTemplate(), templateCard), mapContainer);
