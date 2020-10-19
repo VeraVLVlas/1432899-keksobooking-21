@@ -18,6 +18,7 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 
 // описание функций (но не их вызов);
+
 // пишем функцию для случайного числа
 const getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
@@ -25,7 +26,7 @@ const getRandomIntInclusive = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// пишем функцию для генерирования случайного элемента в массив 1
+// пишем функцию для генерирования случайного элемента в массив
 const randomElements = function (arr) {
   return arr [getRandomIntInclusive(0, arr.length - 1)];
 };
@@ -56,8 +57,6 @@ const generatedAd = function () {
   };
 };
 
-let generatedAdTemplate = generatedAd;
-
 // функция для создание массива объявлений
 const weGenerateAds = function () {
   const addPins = [];
@@ -67,10 +66,7 @@ const weGenerateAds = function () {
   return addPins;
 };
 
-// const addPins = weGenerateAds();
-// появляется ошибка, т.к мы не используем переменную addPins, если её скрыть, ничего не меняется
-
-// Функция для создание DOM элемента из одного объекта объявления 1
+// Функция для создание DOM элемента из одного объекта объявления
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
 
@@ -84,26 +80,7 @@ const clonedAds = function (newMapPin, template) {
   return fragment;
 };
 
-// Нашли шаблон метки 1
-const readyTemplatePin = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
-
-// Нашли див для вставки клонированной метки
-const blockForDrawing = document.querySelector(`.map__pins`);
-// объявление переменных для работы с данными (вызов функций);
-const itemDisplay = weGenerateAds();
-blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
-
-// Работа с ДОМ 1
-// Убрали класс который скрывает интерактивность карты
-const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
-
-
-// Задание третье
-
-// найдем шаблон 2
+// найдем шаблон
 const templateCard = document.querySelector(`#card`)
   .content
   .querySelector(`.popup`);
@@ -127,7 +104,22 @@ const addingNewElements = function (advt, pattern) {
   return cardFragment;
 };
 
-// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
+// Нашли шаблон метки
+const readyTemplatePin = document.querySelector(`#pin`)
+  .content
+  .querySelector(`.map__pin`);
 
+// Нашли див для вставки клонированной метки
+const blockForDrawing = document.querySelector(`.map__pins`);
+// объявление переменных для работы с данными (вызов функций);
+const itemDisplay = weGenerateAds();
+blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+
+// Работа с ДОМ
+// Убрали класс который скрывает интерактивность карты
+const map = document.querySelector(`.map`);
+map.classList.remove(`map--faded`);
+
+// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
 const mapContainer = map.querySelector(`.map__filters-container`);
-map.insertBefore(addingNewElements(generatedAdTemplate(), templateCard), mapContainer);
+map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
