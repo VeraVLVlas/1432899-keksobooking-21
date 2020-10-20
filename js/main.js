@@ -18,6 +18,7 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 
 // описание функций (но не их вызов);
+
 // пишем функцию для случайного числа
 const getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
@@ -65,9 +66,6 @@ const weGenerateAds = function () {
   return addPins;
 };
 
-// const addPins = weGenerateAds();
-// появляется ошибка, т.к мы не используем переменную addPins, если её скрыть, ничего не меняется
-
 // Функция для создание DOM элемента из одного объекта объявления
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
@@ -80,6 +78,30 @@ const clonedAds = function (newMapPin, template) {
     fragment.appendChild(clonElement);
   });
   return fragment;
+};
+
+// найдем шаблон
+const templateCard = document.querySelector(`#card`)
+  .content
+  .querySelector(`.popup`);
+
+// создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
+const addingNewElements = function (advt, pattern) {
+  const cardFragment = document.createDocumentFragment();
+  const addingToAd = pattern.cloneNode(true);
+  addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
+  addingToAd.querySelector(`.popup__text--address`).textContent = `${advt.offer.address}`;
+  addingToAd.querySelector(`.popup__text--price`).textContent = `${advt.offer.price} ₽/ночь`;
+  addingToAd.querySelector(`.popup__type`).textContent = `${advt.offer.type}`;
+  addingToAd.querySelector(`.popup__text--capacity`).textContent = `${advt.offer.rooms} комнат для ${advt.offer.quests} гостей`;
+  addingToAd.querySelector(`.popup__text--time`).textContent = `Заезд после ${advt.offer.checkin} выезд до ${advt.offer.checkuot}`;
+  addingToAd.querySelector(`.popup__features`).textContent = `${advt.offer.features}`;
+  addingToAd.querySelector(`.popup__description`).textContent = `${advt.offer.description}`;
+  addingToAd.querySelector(`.popup__photos img`).src = `${advt.offer.photos}`;
+
+  cardFragment.appendChild(addingToAd);
+
+  return cardFragment;
 };
 
 // Нашли шаблон метки
@@ -97,3 +119,7 @@ blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 // Убрали класс который скрывает интерактивность карты
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
+
+// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
+const mapContainer = map.querySelector(`.map__filters-container`);
+map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
