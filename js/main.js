@@ -81,12 +81,12 @@ const clonedAds = function (newMapPin, template) {
 };
 
 // найдем шаблон
-const templateCard = document.querySelector(`#card`)
-  .content
-  .querySelector(`.popup`);
+// const templateCard = document.querySelector(`#card`)
+//   .content
+//   .querySelector(`.popup`);
 
 // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-const addingNewElements = function (advt, pattern) {
+/* const addingNewElements = function (advt, pattern) {
   const cardFragment = document.createDocumentFragment();
   const addingToAd = pattern.cloneNode(true);
   addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
@@ -102,7 +102,7 @@ const addingNewElements = function (advt, pattern) {
   cardFragment.appendChild(addingToAd);
 
   return cardFragment;
-};
+}; */
 
 // Нашли шаблон метки
 const readyTemplatePin = document.querySelector(`#pin`)
@@ -113,13 +113,105 @@ const readyTemplatePin = document.querySelector(`#pin`)
 const blockForDrawing = document.querySelector(`.map__pins`);
 // объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
-blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 
 // Работа с ДОМ
-// Убрали класс который скрывает интерактивность карты
 const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
 
 // Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-const mapContainer = map.querySelector(`.map__filters-container`);
-map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+// const mapContainer = map.querySelector(`.map__filters-container`);
+// map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+
+
+// добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
+// найдем все fieldset
+
+const section = document.querySelector(`.notice`);
+const openForm = section.querySelector(`form`);
+// const form = openForm.querySelector(`.ad-form`);
+const formPhoto = document.querySelector(`.ad-form-header`);
+// const formElement = openForm.querySelectorAll(`fieldset`); // почему нельзя добавить атрибут на все элементы?
+// Добавляет disabled
+const addsElementLocking = function (element) {
+  element.setAttribute(`disabled`, `disabled`);
+};
+addsElementLocking(formPhoto);
+// addsElementLocking(formElement);
+
+
+// добавьте обработчик события mousedown на элемент .map__pin--main
+const pinMain = document.querySelector(`.map__pin--main`);
+
+pinMain.addEventListener(`mousedown`, function (evt) {
+  // удаляет disabled
+  const unlocksElements = function (element) {
+    element.removeAttribute(`disabled`, `disabled`);
+  };
+  if (evt.button === 0) {
+    unlocksElements(formPhoto);
+    blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+    openForm.classList.remove(`ad-form--disabled`);
+    map.classList.remove(`map--faded`);
+  }
+});
+
+// перевод страницы в активный режим с клавиатуры: установить обработчик keydown для метки
+// и если пользователь нажал Enter — перевести страницу в активный режим.
+pinMain.addEventListener(`keydown`, function (evt) {
+  // удаляет disabled
+  const unlocksElements = function (element) {
+    element.removeAttribute(`disabled`, `disabled`);
+  };
+  if (evt.key === `Enter`) {
+    unlocksElements(formPhoto);
+    blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+    openForm.classList.remove(`ad-form--disabled`);
+    map.classList.remove(`map--faded`);
+  }
+});
+
+// Заполнение поля адреса
+// const PIN_WIDTH = 65;
+const PIN_HEIGHT = 65;
+const INDEX_HEIGHT = 22;
+const addressField = openForm.querySelector(`#address`);
+const pinPositionX = pinMain.style.top;
+const pinPositionY = pinMain.style.left;
+
+const initPinMainPosition = function () {
+  addressField.value = `${pinPositionX}, ${pinPositionY}`; // данные отображаются некорректно
+};
+initPinMainPosition();
+
+const setupAddress = function () {
+  const newPinY = Math.trunc(pinPositionX + PIN_HEIGHT + INDEX_HEIGHT); // что ещё прибавляется
+  addressField.value = `${pinPositionX}, ${newPinY}`; // данные отображаются некорректно
+};
+setupAddress();
+
+// Непростая валидация
+const numberOfRooms = openForm.querySelector(`#room_number`);
+const numberOfGuests = openForm.querySelector(`#capacity`);
+
+const compareByQuantity = function () {
+  const guestData = numberOfGuests.value;
+  const roomData = numberOfRooms.value;
+
+  if (Number(roomData) === 100 && Number(guestData) !== 0) {
+    numberOfGuests.setCustomValidity(`Вариант '100 комнат' предназначен для не для гостей`);
+  } else if (Number(guestData) === 0 && Number(roomData) !== 100) {
+    numberOfGuests.setCustomValidity(`Вариант 'не для гостей' подходит только для '100 комнат'`);
+  } else if (Number(roomData) < Number(guestData)) {
+    numberOfGuests.setCustomValidity(`Количество гостей не соответствует количеству комнат. Количество гостей не должно превышать: ${Number(roomData)} `);
+  } else {
+    numberOfGuests.setCustomValidity(``);
+  }
+  numberOfGuests.reportValidity();
+};
+
+numberOfGuests.addEventListener(`change`, function () {
+  compareByQuantity();
+});
+
+numberOfRooms.addEventListener(`change`, function () {
+  compareByQuantity();
+});
