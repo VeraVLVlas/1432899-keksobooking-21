@@ -16,6 +16,8 @@ const ADDITIONALLY = [`Большая лоджия`, `Вы вернетесь с
 const PHOTO_ROOMS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
+const PIN_HEIGHT = 65;
+const INDEX_HEIGHT = 22;
 
 // описание функций (но не их вызов);
 
@@ -31,6 +33,7 @@ const randomElements = function (arr) {
   return arr [getRandomIntInclusive(0, arr.length - 1)];
 };
 
+// 1. создаем пины
 // пишем функцию для создания одного объявления
 const generatedAd = function () {
   return {
@@ -66,6 +69,7 @@ const weGenerateAds = function () {
   return addPins;
 };
 
+// 2. создаем ДОМ элементы из этих пинов
 // Функция для создание DOM элемента из одного объекта объявления
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
@@ -108,13 +112,8 @@ const clonedAds = function (newMapPin, template) {
 const readyTemplatePin = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
-
-// Нашли див для вставки клонированной метки
 const blockForDrawing = document.querySelector(`.map__pins`);
-// объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
-
-// Работа с ДОМ
 const map = document.querySelector(`.map`);
 
 // Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
@@ -123,90 +122,80 @@ const map = document.querySelector(`.map`);
 
 
 // добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
-// найдем все fieldset
-
+// Добавляет disabled
+const disabled = function (elements) {
+  elements.forEach(function (element) {
+    element.setAttribute(`disabled`, `disabled`);
+  });
+};
 const section = document.querySelector(`.notice`);
 const openForm = section.querySelector(`form`);
-// const form = openForm.querySelector(`.ad-form`);
-const formPhoto = document.querySelector(`.ad-form-header`);
-// const formElement = openForm.querySelectorAll(`fieldset`); // почему нельзя добавить атрибут на все элементы?
-// Добавляет disabled
-const addsElementLocking = function (element) {
-  element.setAttribute(`disabled`, `disabled`);
-};
-addsElementLocking(formPhoto);
-// addsElementLocking(formElement);
-
+const formPhoto = openForm.querySelector(`.ad-form-header`);
+const formElement = openForm.querySelectorAll(`fieldset`);
+disabled(formElement);
+formPhoto.setAttribute(`disabled`, `disabled`);
 
 // добавьте обработчик события mousedown на элемент .map__pin--main
 const pinMain = document.querySelector(`.map__pin--main`);
-
 pinMain.addEventListener(`mousedown`, function (evt) {
-  // удаляет disabled
-  const unlocksElements = function (element) {
-    element.removeAttribute(`disabled`, `disabled`);
-  };
   if (evt.button === 0) {
-    unlocksElements(formPhoto);
-    blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
-    openForm.classList.remove(`ad-form--disabled`);
-    map.classList.remove(`map--faded`);
+    activatePage();
   }
 });
 
 // перевод страницы в активный режим с клавиатуры: установить обработчик keydown для метки
 // и если пользователь нажал Enter — перевести страницу в активный режим.
 pinMain.addEventListener(`keydown`, function (evt) {
-  // удаляет disabled
-  const unlocksElements = function (element) {
-    element.removeAttribute(`disabled`, `disabled`);
-  };
   if (evt.key === `Enter`) {
-    unlocksElements(formPhoto);
-    blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
-    openForm.classList.remove(`ad-form--disabled`);
-    map.classList.remove(`map--faded`);
+    activatePage();
   }
 });
 
-// Заполнение поля адреса
-// const PIN_WIDTH = 65;
-const PIN_HEIGHT = 65;
-const INDEX_HEIGHT = 22;
-const addressField = openForm.querySelector(`#address`);
-const pinPositionX = pinMain.style.top;
-const pinPositionY = pinMain.style.left;
-
-const initPinMainPosition = function () {
-  addressField.value = `${pinPositionX}, ${pinPositionY}`; // данные отображаются некорректно
+// функция для активации страницы в доступный режим
+const activatePage = function () {
+  const active = function (elements) {
+    elements.forEach(function (element) {
+      element.removeAttribute(`disabled`, `disabled`);
+    });
+  };
+  active(formElement);
+  map.classList.remove(`map--faded`);
+  openForm.classList.remove(`ad-form--disabled`);
+  blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
 };
-initPinMainPosition();
+
+// Заполнение поля адреса, костыльный вариант
+const addressField = openForm.querySelector(`#address`);
+const pinPositionX = pinMain.offsetTop;
+// const pinPositionY = pinMain.offsetLeft;
 
 const setupAddress = function () {
-  const newPinY = Math.trunc(pinPositionX + PIN_HEIGHT + INDEX_HEIGHT); // что ещё прибавляется
-  addressField.value = `${pinPositionX}, ${newPinY}`; // данные отображаются некорректно
+  const newPinY = pinPositionX + PIN_HEIGHT + INDEX_HEIGHT;
+  addressField.value = `${pinPositionX}, ${newPinY}`;
 };
 setupAddress();
 
 // Непростая валидация
-const numberOfRooms = openForm.querySelector(`#room_number`);
-const numberOfGuests = openForm.querySelector(`#capacity`);
-
-const compareByQuantity = function () {
+const compareByQuantity = function (numberPeople) {
   const guestData = numberOfGuests.value;
   const roomData = numberOfRooms.value;
 
   if (Number(roomData) === 100 && Number(guestData) !== 0) {
-    numberOfGuests.setCustomValidity(`Вариант '100 комнат' предназначен для не для гостей`);
+    numberPeople.setCustomValidity(`Вариант '100 комнат' предназначен для не для гостей`);
   } else if (Number(guestData) === 0 && Number(roomData) !== 100) {
-    numberOfGuests.setCustomValidity(`Вариант 'не для гостей' подходит только для '100 комнат'`);
+    numberPeople.setCustomValidity(`Вариант 'не для гостей' подходит только для '100 комнат'`);
   } else if (Number(roomData) < Number(guestData)) {
-    numberOfGuests.setCustomValidity(`Количество гостей не соответствует количеству комнат. Количество гостей не должно превышать: ${Number(roomData)} `);
+    numberPeople.setCustomValidity(`Количество гостей не соответствует количеству комнат. Количество гостей не должно превышать: ${Number(roomData)} `);
   } else {
-    numberOfGuests.setCustomValidity(``);
+    numberPeople.setCustomValidity(``);
   }
-  numberOfGuests.reportValidity();
+  numberPeople.reportValidity();
 };
+
+const numberOfRooms = openForm.querySelector(`#room_number`);
+const numberOfGuests = openForm.querySelector(`#capacity`);
+
+compareByQuantity(numberOfGuests);
 
 numberOfGuests.addEventListener(`change`, function () {
   compareByQuantity();
