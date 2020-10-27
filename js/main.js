@@ -185,12 +185,26 @@ const roomValueMap = {
 
 const numberOfRooms = openForm.querySelector(`#room_number`);
 const numberOfGuests = openForm.querySelector(`#capacity`);
-
+// функция для проверки комнат
 numberOfRooms.addEventListener(`change`, function () {
   const room = numberOfRooms.value;
 
   Array.from(numberOfGuests.options).forEach(function (option) {
     if (roomValueMap[room].includes(option.value)) {
+      option.removeAttribute(`disabled`);
+      option.setAttribute(`selected`, ``);
+    } else {
+      option.setAttribute(`disabled`, ``);
+      option.removeAttribute(`selected`);
+    }
+  });
+});
+// функция для проверки гости = комнаты
+numberOfGuests.addEventListener(`change`, function () {
+  const guests = numberOfRooms.value;
+
+  Array.from(numberOfGuests.options).forEach(function (option) {
+    if (roomValueMap[guests].includes(option.value)) {
       option.removeAttribute(`disabled`);
       option.setAttribute(`selected`, ``);
     } else {
