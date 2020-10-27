@@ -176,31 +176,26 @@ const setupAddress = function () {
 setupAddress();
 
 // Непростая валидация
-const compareByQuantity = function (numberPeople) {
-  const guestData = numberOfGuests.value;
-  const roomData = numberOfRooms.value;
-
-  if (Number(roomData) === 100 && Number(guestData) !== 0) {
-    numberPeople.setCustomValidity(`Вариант '100 комнат' предназначен для не для гостей`);
-  } else if (Number(guestData) === 0 && Number(roomData) !== 100) {
-    numberPeople.setCustomValidity(`Вариант 'не для гостей' подходит только для '100 комнат'`);
-  } else if (Number(roomData) < Number(guestData)) {
-    numberPeople.setCustomValidity(`Количество гостей не соответствует количеству комнат. Количество гостей не должно превышать: ${Number(roomData)} `);
-  } else {
-    numberPeople.setCustomValidity(``);
-  }
-  numberPeople.reportValidity();
+const roomValueMap = {
+  "1": [`1`],
+  "2": [`1`, `2`],
+  "3": [`2`, `3`],
+  "100": [`0`]
 };
 
 const numberOfRooms = openForm.querySelector(`#room_number`);
 const numberOfGuests = openForm.querySelector(`#capacity`);
 
-compareByQuantity(numberOfGuests);
-
-numberOfGuests.addEventListener(`change`, function () {
-  compareByQuantity();
-});
-
 numberOfRooms.addEventListener(`change`, function () {
-  compareByQuantity();
+  const room = numberOfRooms.value;
+
+  Array.from(numberOfGuests.options).forEach(function (option) {
+    if (roomValueMap[room].includes(option.value)) {
+      option.removeAttribute(`disabled`);
+      option.setAttribute(`selected`, ``);
+    } else {
+      option.setAttribute(`disabled`, ``);
+      option.removeAttribute(`selected`);
+    }
+  });
 });
