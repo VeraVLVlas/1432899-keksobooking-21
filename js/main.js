@@ -178,8 +178,8 @@ setupAddress();
 // Непростая валидация
 const roomValueMap = {
   "1": [`1`],
-  "2": [`1`, `2`],
-  "3": [`2`, `3`],
+  "2": [`2`, `1`],
+  "3": [`3`, `2`, `1`],
   "100": [`0`]
 };
 
@@ -191,20 +191,6 @@ numberOfRooms.addEventListener(`change`, function () {
 
   Array.from(numberOfGuests.options).forEach(function (option) {
     if (roomValueMap[room].includes(option.value)) {
-      option.removeAttribute(`disabled`);
-      option.setAttribute(`selected`, ``);
-    } else {
-      option.setAttribute(`disabled`, ``);
-      option.removeAttribute(`selected`);
-    }
-  });
-});
-// функция для проверки гости = комнаты
-numberOfGuests.addEventListener(`change`, function () {
-  const guests = numberOfRooms.value;
-
-  Array.from(numberOfGuests.options).forEach(function (option) {
-    if (roomValueMap[guests].includes(option.value)) {
       option.removeAttribute(`disabled`);
       option.setAttribute(`selected`, ``);
     } else {
