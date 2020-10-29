@@ -162,6 +162,9 @@ const activatePage = function () {
   map.classList.remove(`map--faded`);
   openForm.classList.remove(`ad-form--disabled`);
   blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+  numberOfRooms.addEventListener(`change`, function () {
+    validationCheck();
+  });
 };
 
 // Заполнение поля адреса, костыльный вариант
@@ -200,6 +203,4 @@ const validationCheck = function () {
   });
 };
 
-numberOfRooms.addEventListener(`change`, function () {
-  validationCheck();
-});
+validationCheck();
