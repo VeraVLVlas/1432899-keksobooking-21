@@ -186,7 +186,7 @@ const roomValueMap = {
 const numberOfRooms = openForm.querySelector(`#room_number`);
 const numberOfGuests = openForm.querySelector(`#capacity`);
 // функция для проверки комнат
-numberOfRooms.addEventListener(`change`, function () {
+const validationCheck = function () {
   const room = numberOfRooms.value;
 
   Array.from(numberOfGuests.options).forEach(function (option) {
@@ -198,4 +198,8 @@ numberOfRooms.addEventListener(`change`, function () {
       option.removeAttribute(`selected`);
     }
   });
+};
+
+numberOfRooms.addEventListener(`change`, function () {
+  validationCheck();
 });
