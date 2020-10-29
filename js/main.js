@@ -16,6 +16,8 @@ const ADDITIONALLY = [`Большая лоджия`, `Вы вернетесь с
 const PHOTO_ROOMS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
+const PIN_HEIGHT = 65;
+const INDEX_HEIGHT = 22;
 
 // описание функций (но не их вызов);
 
@@ -31,6 +33,7 @@ const randomElements = function (arr) {
   return arr [getRandomIntInclusive(0, arr.length - 1)];
 };
 
+// 1. создаем пины
 // пишем функцию для создания одного объявления
 const generatedAd = function () {
   return {
@@ -66,6 +69,7 @@ const weGenerateAds = function () {
   return addPins;
 };
 
+// 2. создаем ДОМ элементы из этих пинов
 // Функция для создание DOM элемента из одного объекта объявления
 const clonedAds = function (newMapPin, template) {
   const fragment = document.createDocumentFragment();
@@ -81,12 +85,12 @@ const clonedAds = function (newMapPin, template) {
 };
 
 // найдем шаблон
-const templateCard = document.querySelector(`#card`)
-  .content
-  .querySelector(`.popup`);
+// const templateCard = document.querySelector(`#card`)
+//   .content
+//   .querySelector(`.popup`);
 
 // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-const addingNewElements = function (advt, pattern) {
+/* const addingNewElements = function (advt, pattern) {
   const cardFragment = document.createDocumentFragment();
   const addingToAd = pattern.cloneNode(true);
   addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
@@ -102,24 +106,101 @@ const addingNewElements = function (advt, pattern) {
   cardFragment.appendChild(addingToAd);
 
   return cardFragment;
-};
+}; */
 
 // Нашли шаблон метки
 const readyTemplatePin = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
-
-// Нашли див для вставки клонированной метки
 const blockForDrawing = document.querySelector(`.map__pins`);
-// объявление переменных для работы с данными (вызов функций);
 const itemDisplay = weGenerateAds();
-blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
-
-// Работа с ДОМ
-// Убрали класс который скрывает интерактивность карты
 const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
 
 // Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-const mapContainer = map.querySelector(`.map__filters-container`);
-map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+// const mapContainer = map.querySelector(`.map__filters-container`);
+// map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+
+
+// добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
+// Добавляет disabled
+const disabled = function (elements) {
+  elements.forEach(function (element) {
+    element.setAttribute(`disabled`, `disabled`);
+  });
+};
+const section = document.querySelector(`.notice`);
+const openForm = section.querySelector(`form`);
+const formPhoto = openForm.querySelector(`.ad-form-header`);
+const formElement = openForm.querySelectorAll(`fieldset`);
+disabled(formElement);
+formPhoto.setAttribute(`disabled`, `disabled`);
+
+// добавьте обработчик события mousedown на элемент .map__pin--main
+const pinMain = document.querySelector(`.map__pin--main`);
+pinMain.addEventListener(`mousedown`, function (evt) {
+  if (evt.button === 0) {
+    activatePage();
+  }
+});
+
+// перевод страницы в активный режим с клавиатуры: установить обработчик keydown для метки
+// и если пользователь нажал Enter — перевести страницу в активный режим.
+pinMain.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    activatePage();
+  }
+});
+
+// функция для активации страницы в доступный режим
+const activatePage = function () {
+  const active = function (elements) {
+    elements.forEach(function (element) {
+      element.removeAttribute(`disabled`, `disabled`);
+    });
+  };
+  active(formElement);
+  map.classList.remove(`map--faded`);
+  openForm.classList.remove(`ad-form--disabled`);
+  blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+  numberOfRooms.addEventListener(`change`, function () {
+    validationCheck();
+  });
+};
+
+// Заполнение поля адреса, костыльный вариант
+const addressField = openForm.querySelector(`#address`);
+const pinPositionX = pinMain.offsetTop;
+// const pinPositionY = pinMain.offsetLeft;
+
+const setupAddress = function () {
+  const newPinY = pinPositionX + PIN_HEIGHT + INDEX_HEIGHT;
+  addressField.value = `${pinPositionX}, ${newPinY}`;
+};
+setupAddress();
+
+// Непростая валидация
+const roomValueMap = {
+  "1": [`1`],
+  "2": [`2`, `1`],
+  "3": [`3`, `2`, `1`],
+  "100": [`0`]
+};
+
+const numberOfRooms = openForm.querySelector(`#room_number`);
+const numberOfGuests = openForm.querySelector(`#capacity`);
+// функция для проверки комнат
+const validationCheck = function () {
+  const room = numberOfRooms.value;
+
+  Array.from(numberOfGuests.options).forEach(function (option) {
+    if (roomValueMap[room].includes(option.value)) {
+      option.removeAttribute(`disabled`);
+      option.setAttribute(`selected`, ``);
+    } else {
+      option.setAttribute(`disabled`, ``);
+      option.removeAttribute(`selected`);
+    }
+  });
+};
+
+validationCheck();
