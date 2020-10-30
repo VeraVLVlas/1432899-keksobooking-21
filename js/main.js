@@ -87,13 +87,6 @@ const clonedAds = function (newMapPin, template) {
     clonElement.addEventListener(`click`, function () {
       const mapContainer = map.querySelector(`.map__filters-container`);
       map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
-
-      const clousePins = function () {
-        document.querySelector(`.popup__close`).addEventListener(`click`, function () {
-          document.querySelector(`.map__card`).style.display = `none`;
-        });
-      };
-      clousePins();
     });
   });
   return fragment;
@@ -120,6 +113,12 @@ const addingNewElements = function (advt, pattern) {
 
   cardFragment.appendChild(addingToAd);
 
+  const clousePins = function () {
+    addingToAd.querySelector(`.popup__close`).addEventListener(`click`, function () {
+      addingToAd.style.display = `none`;
+    });
+  };
+  clousePins();
   return cardFragment;
 };
 
@@ -130,9 +129,6 @@ const readyTemplatePin = document.querySelector(`#pin`)
 const blockForDrawing = document.querySelector(`.map__pins`);
 const itemDisplay = weGenerateAds();
 const map = document.querySelector(`.map`);
-
-// !!!Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-
 
 // добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
 // Добавляет disabled
@@ -218,8 +214,6 @@ const validationCheck = function () {
 
 validationCheck();
 
-// задание 4.2
-// ВАЛИДАЦИЯ
 // Поле «Заголовок объявления».
 const headline = document.getElementById(`title`);
 headline.addEventListener(`onchange`, function () {
