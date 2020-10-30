@@ -18,6 +18,9 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 const PIN_HEIGHT = 65;
 const INDEX_HEIGHT = 22;
+const MIN_NUMBER_SYMBOLS = 30;
+const MAX_NUMBER_SYMBOLS = 100;
+const MAX_PRICE = 1000000;
 
 // описание функций (но не их вызов);
 
@@ -85,12 +88,12 @@ const clonedAds = function (newMapPin, template) {
 };
 
 // найдем шаблон
-// const templateCard = document.querySelector(`#card`)
-//   .content
-//   .querySelector(`.popup`);
+const templateCard = document.querySelector(`#card`)
+.content
+.querySelector(`.popup`);
 
 // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-/* const addingNewElements = function (advt, pattern) {
+const addingNewElements = function (advt, pattern) {
   const cardFragment = document.createDocumentFragment();
   const addingToAd = pattern.cloneNode(true);
   addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
@@ -106,7 +109,7 @@ const clonedAds = function (newMapPin, template) {
   cardFragment.appendChild(addingToAd);
 
   return cardFragment;
-}; */
+};
 
 // Нашли шаблон метки
 const readyTemplatePin = document.querySelector(`#pin`)
@@ -116,9 +119,7 @@ const blockForDrawing = document.querySelector(`.map__pins`);
 const itemDisplay = weGenerateAds();
 const map = document.querySelector(`.map`);
 
-// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-// const mapContainer = map.querySelector(`.map__filters-container`);
-// map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+// !!!Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
 
 
 // добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
@@ -165,6 +166,7 @@ const activatePage = function () {
   numberOfRooms.addEventListener(`change`, function () {
     validationCheck();
   });
+  showingPinsAd();
 };
 
 // Заполнение поля адреса, костыльный вариант
@@ -204,3 +206,120 @@ const validationCheck = function () {
 };
 
 validationCheck();
+
+// задание 4.2
+// найти все кнопки и повесить им  обработчик события (клик)
+// При клике на кнопку должно показываться объявление
+// при клике на крестик объявление закрывается\
+const showingPinsAd = function () {
+  const allPins = document.querySelectorAll(`.map__pin`);
+
+  const activePins = function (elements) {
+    elements.forEach(function (element) {
+      element.addEventListener(`click`, function () {
+        const mapContainer = map.querySelector(`.map__filters-container`);
+        map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+
+        const clousePins = function () {
+          document.querySelector(`.popup__close`).addEventListener(`click`, function () {
+            document.querySelector(`.map__card`).style.display = `none`;
+          });
+        };
+        clousePins();
+      });
+    });
+  };
+  activePins(allPins);
+};
+// ВАЛИДАЦИЯ
+// Поле «Заголовок объявления».
+const headline = document.getElementById(`title`);
+headline.addEventListener(`input`, function () {
+  const characterLength = headline.value.length;
+
+  if (characterLength < MIN_NUMBER_SYMBOLS) {
+    headline.setCustomValidity(`Введите ` + (MIN_NUMBER_SYMBOLS - characterLength) + ` симв.`);
+  } else if (characterLength > MAX_NUMBER_SYMBOLS) {
+    headline.setCustomValidity(`Удалите` + (characterLength - MAX_NUMBER_SYMBOLS) + ` симв.`);
+  } else {
+    headline.setCustomValidity(``);
+  }
+  headline.reportValidity();
+});
+
+// Поле «Тип жилья».
+const housingPrice = document.getElementById(`price`);
+housingPrice.addEventListener(`input`, function () {
+  const enteredCharacters = housingPrice.value;
+
+  if (enteredCharacters > MAX_PRICE) {
+    housingPrice.setCustomValidity(`Сумма не совпадает с ` + MAX_PRICE);
+  } else {
+    housingPrice.setCustomValidity(``);
+  }
+  housingPrice.reportValidity();
+});
+
+const typeHousing = document.getElementById(`type`);
+const setsPrice = function () {
+
+  if (typeHousing.value === `bungalow`) {
+    housingPrice.setAttribute(`min`, `0`);
+    housingPrice.setAttribute(`placeholder`, `0`);
+  } else if (typeHousing.value === `flat`) {
+    housingPrice.setAttribute(`min`, `1000`);
+    housingPrice.setAttribute(`placeholder`, `1000`);
+  } else if (typeHousing.value === `house`) {
+    housingPrice.setAttribute(`min`, `5000`);
+    housingPrice.setAttribute(`placeholder`, `5000`);
+  } else if (typeHousing.value === `palace`) {
+    housingPrice.setAttribute(`min`, `10000`);
+    housingPrice.setAttribute(`placeholder`, `10000`);
+  }
+};
+setsPrice();
+
+typeHousing.addEventListener(`change`, function () {
+  setsPrice();
+});
+
+// Поля «Время заезда», «Время выезда».
+const timeOut = document.getElementById(`timeout`);
+const timeIn = document.getElementById(`timein`);
+
+const comparesCheckInTimes = function () {
+
+  if (timeIn.value === `12:00`) {
+    timeOut.value = `12:00`;
+  } else if (timeIn.value === `13:00`) {
+    timeOut.value = `13:00`;
+  } else if (timeIn.value === `14:00`) {
+    timeOut.value = `14:00`;
+  }
+};
+
+timeIn.addEventListener(`change`, function () {
+  comparesCheckInTimes();
+});
+
+const comparesCheckOutTimes = function () {
+
+  if (timeOut.value === `12:00`) {
+    timeIn.value = `12:00`;
+  } else if (timeOut.value === `13:00`) {
+    timeIn.value = `13:00`;
+  } else if (timeOut.value === `14:00`) {
+    timeIn.value = `14:00`;
+  }
+};
+
+timeOut.addEventListener(`change`, function () {
+  comparesCheckOutTimes();
+});
+
+// Значением полей «Ваша фотография» и «Фотография жилья» может быть только изображение.
+const photoCheck = function () {
+  document.getElementById(`avatar`).setAttribute(`accept`, `image/png, image/jpeg`);
+  document.getElementById(`images`).setAttribute(`accept`, `image/png, image/jpeg`);
+};
+photoCheck();
