@@ -83,6 +83,18 @@ const clonedAds = function (newMapPin, template) {
     clonElement.style = `left: ${pinClone.location.x}px; top: ${pinClone.location.y}px`;
     clonPictures.src = `${pinClone.autor.avatar}`;
     fragment.appendChild(clonElement);
+
+    clonElement.addEventListener(`click`, function () {
+      const mapContainer = map.querySelector(`.map__filters-container`);
+      map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+
+      const clousePins = function () {
+        document.querySelector(`.popup__close`).addEventListener(`click`, function () {
+          document.querySelector(`.map__card`).style.display = `none`;
+        });
+      };
+      clousePins();
+    });
   });
   return fragment;
 };
@@ -166,7 +178,6 @@ const activatePage = function () {
   numberOfRooms.addEventListener(`change`, function () {
     validationCheck();
   });
-  showingPinsAd();
 };
 
 // Заполнение поля адреса, костыльный вариант
@@ -208,33 +219,10 @@ const validationCheck = function () {
 validationCheck();
 
 // задание 4.2
-// найти все кнопки и повесить им  обработчик события (клик)
-// При клике на кнопку должно показываться объявление
-// при клике на крестик объявление закрывается\
-const showingPinsAd = function () {
-  const allPins = document.querySelectorAll(`.map__pin`);
-
-  const activePins = function (elements) {
-    elements.forEach(function (element) {
-      element.addEventListener(`click`, function () {
-        const mapContainer = map.querySelector(`.map__filters-container`);
-        map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
-
-        const clousePins = function () {
-          document.querySelector(`.popup__close`).addEventListener(`click`, function () {
-            document.querySelector(`.map__card`).style.display = `none`;
-          });
-        };
-        clousePins();
-      });
-    });
-  };
-  activePins(allPins);
-};
 // ВАЛИДАЦИЯ
 // Поле «Заголовок объявления».
 const headline = document.getElementById(`title`);
-headline.addEventListener(`input`, function () {
+headline.addEventListener(`onchange`, function () {
   const characterLength = headline.value.length;
 
   if (characterLength < MIN_NUMBER_SYMBOLS) {
@@ -249,7 +237,7 @@ headline.addEventListener(`input`, function () {
 
 // Поле «Тип жилья».
 const housingPrice = document.getElementById(`price`);
-housingPrice.addEventListener(`input`, function () {
+housingPrice.addEventListener(`onchange`, function () {
   const enteredCharacters = housingPrice.value;
 
   if (enteredCharacters > MAX_PRICE) {
@@ -288,33 +276,15 @@ const timeOut = document.getElementById(`timeout`);
 const timeIn = document.getElementById(`timein`);
 
 const comparesCheckInTimes = function () {
-
-  if (timeIn.value === `12:00`) {
-    timeOut.value = `12:00`;
-  } else if (timeIn.value === `13:00`) {
-    timeOut.value = `13:00`;
-  } else if (timeIn.value === `14:00`) {
-    timeOut.value = `14:00`;
-  }
+  timeOut.value = timeIn.value;
 };
 
 timeIn.addEventListener(`change`, function () {
   comparesCheckInTimes();
 });
 
-const comparesCheckOutTimes = function () {
-
-  if (timeOut.value === `12:00`) {
-    timeIn.value = `12:00`;
-  } else if (timeOut.value === `13:00`) {
-    timeIn.value = `13:00`;
-  } else if (timeOut.value === `14:00`) {
-    timeIn.value = `14:00`;
-  }
-};
-
 timeOut.addEventListener(`change`, function () {
-  comparesCheckOutTimes();
+  comparesCheckInTimes();
 });
 
 // Значением полей «Ваша фотография» и «Фотография жилья» может быть только изображение.
@@ -322,4 +292,5 @@ const photoCheck = function () {
   document.getElementById(`avatar`).setAttribute(`accept`, `image/png, image/jpeg`);
   document.getElementById(`images`).setAttribute(`accept`, `image/png, image/jpeg`);
 };
+
 photoCheck();
