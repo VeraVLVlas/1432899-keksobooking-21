@@ -119,6 +119,14 @@ const addingNewElements = function (advt, pattern) {
     });
   };
   clousePins();
+
+  document.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      addingToAd.style.display = `none`;
+    }
+  });
+
   return cardFragment;
 };
 
