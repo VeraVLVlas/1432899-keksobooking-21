@@ -18,6 +18,9 @@ const LOCATION_BY_X = [100, 200, 300, 910, 450, 818, 718];
 const LOCATION_BY_Y = [200, 180, 196, 540, 360, 130, 101, 250, 630];
 const PIN_HEIGHT = 65;
 const INDEX_HEIGHT = 22;
+const MIN_NUMBER_SYMBOLS = 30;
+const MAX_NUMBER_SYMBOLS = 100;
+const MAX_PRICE = 1000000;
 
 // описание функций (но не их вызов);
 
@@ -80,17 +83,22 @@ const clonedAds = function (newMapPin, template) {
     clonElement.style = `left: ${pinClone.location.x}px; top: ${pinClone.location.y}px`;
     clonPictures.src = `${pinClone.autor.avatar}`;
     fragment.appendChild(clonElement);
+
+    clonElement.addEventListener(`click`, function () {
+      const mapContainer = map.querySelector(`.map__filters-container`);
+      map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+    });
   });
   return fragment;
 };
 
 // найдем шаблон
-// const templateCard = document.querySelector(`#card`)
-//   .content
-//   .querySelector(`.popup`);
+const templateCard = document.querySelector(`#card`)
+.content
+.querySelector(`.popup`);
 
 // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-/* const addingNewElements = function (advt, pattern) {
+const addingNewElements = function (advt, pattern) {
   const cardFragment = document.createDocumentFragment();
   const addingToAd = pattern.cloneNode(true);
   addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
@@ -105,8 +113,22 @@ const clonedAds = function (newMapPin, template) {
 
   cardFragment.appendChild(addingToAd);
 
+  const clousePins = function () {
+    addingToAd.querySelector(`.popup__close`).addEventListener(`click`, function () {
+      addingToAd.style.display = `none`;
+    });
+  };
+  clousePins();
+
+  document.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      addingToAd.style.display = `none`;
+    }
+  });
+
   return cardFragment;
-}; */
+};
 
 // Нашли шаблон метки
 const readyTemplatePin = document.querySelector(`#pin`)
@@ -115,11 +137,6 @@ const readyTemplatePin = document.querySelector(`#pin`)
 const blockForDrawing = document.querySelector(`.map__pins`);
 const itemDisplay = weGenerateAds();
 const map = document.querySelector(`.map`);
-
-// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-// const mapContainer = map.querySelector(`.map__filters-container`);
-// map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
-
 
 // добавить через DOM-операции самим полям или fieldset, которые их содержат, атрибут disabled.
 // Добавляет disabled
@@ -204,3 +221,78 @@ const validationCheck = function () {
 };
 
 validationCheck();
+
+// Поле «Заголовок объявления».
+const headline = document.getElementById(`title`);
+headline.addEventListener(`change`, function () {
+  const characterLength = headline.value.length;
+
+  if (characterLength < MIN_NUMBER_SYMBOLS) {
+    headline.setCustomValidity(`Введите ` + (MIN_NUMBER_SYMBOLS - characterLength) + ` симв.`);
+  } else if (characterLength > MAX_NUMBER_SYMBOLS) {
+    headline.setCustomValidity(`Удалите` + (characterLength - MAX_NUMBER_SYMBOLS) + ` симв.`);
+  } else {
+    headline.setCustomValidity(``);
+  }
+  headline.reportValidity();
+});
+
+// Поле «Тип жилья».
+const housingPrice = document.getElementById(`price`);
+housingPrice.addEventListener(`change`, function () {
+  const enteredCharacters = housingPrice.value;
+
+  if (enteredCharacters > MAX_PRICE) {
+    housingPrice.setCustomValidity(`Сумма не совпадает с ` + MAX_PRICE);
+  } else {
+    housingPrice.setCustomValidity(``);
+  }
+  housingPrice.reportValidity();
+});
+
+const typeHousing = document.getElementById(`type`);
+const setsPrice = function () {
+
+  if (typeHousing.value === `bungalow`) {
+    housingPrice.setAttribute(`min`, `0`);
+    housingPrice.setAttribute(`placeholder`, `0`);
+  } else if (typeHousing.value === `flat`) {
+    housingPrice.setAttribute(`min`, `1000`);
+    housingPrice.setAttribute(`placeholder`, `1000`);
+  } else if (typeHousing.value === `house`) {
+    housingPrice.setAttribute(`min`, `5000`);
+    housingPrice.setAttribute(`placeholder`, `5000`);
+  } else if (typeHousing.value === `palace`) {
+    housingPrice.setAttribute(`min`, `10000`);
+    housingPrice.setAttribute(`placeholder`, `10000`);
+  }
+};
+setsPrice();
+
+typeHousing.addEventListener(`change`, function () {
+  setsPrice();
+});
+
+// Поля «Время заезда», «Время выезда».
+const timeOut = document.getElementById(`timeout`);
+const timeIn = document.getElementById(`timein`);
+
+const comparesCheckInTimes = function () {
+  timeOut.value = timeIn.value;
+};
+
+timeIn.addEventListener(`change`, function () {
+  comparesCheckInTimes();
+});
+
+timeOut.addEventListener(`change`, function () {
+  comparesCheckInTimes();
+});
+
+// Значением полей «Ваша фотография» и «Фотография жилья» может быть только изображение.
+const photoCheck = function () {
+  document.getElementById(`avatar`).setAttribute(`accept`, `image/png, image/jpeg`);
+  document.getElementById(`images`).setAttribute(`accept`, `image/png, image/jpeg`);
+};
+
+photoCheck();
