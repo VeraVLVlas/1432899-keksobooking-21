@@ -224,7 +224,7 @@ validationCheck();
 
 // Поле «Заголовок объявления».
 const headline = document.getElementById(`title`);
-headline.addEventListener(`onchange`, function () {
+headline.addEventListener(`change`, function () {
   const characterLength = headline.value.length;
 
   if (characterLength < MIN_NUMBER_SYMBOLS) {
@@ -239,7 +239,7 @@ headline.addEventListener(`onchange`, function () {
 
 // Поле «Тип жилья».
 const housingPrice = document.getElementById(`price`);
-housingPrice.addEventListener(`onchange`, function () {
+housingPrice.addEventListener(`change`, function () {
   const enteredCharacters = housingPrice.value;
 
   if (enteredCharacters > MAX_PRICE) {
