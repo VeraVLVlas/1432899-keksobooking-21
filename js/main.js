@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 // объявление констант
-  const {validationCheck, formElement, openForm, numberOfRooms} = window.form;
+  const {validationCheck} = window.form;
   const {itemDisplay} = window.data;
   const {clonedAds} = window.map;
 
@@ -36,11 +36,13 @@
         element.removeAttribute(`disabled`, `disabled`);
       });
     };
-    active(formElement);
+    active(document.querySelectorAll(`fieldset`));
     map.classList.remove(`map--faded`);
+    const section = document.querySelector(`.notice`);
+    const openForm = section.querySelector(`form`);
     openForm.classList.remove(`ad-form--disabled`);
     blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
-    numberOfRooms.addEventListener(`change`, function () {
+    openForm.querySelector(`#room_number`).addEventListener(`change`, function () {
       validationCheck();
     });
   };

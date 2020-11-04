@@ -18,19 +18,27 @@
 
     cardFragment.appendChild(addingToAd);
 
-    const clousePins = function () {
-      addingToAd.querySelector(`.popup__close`).addEventListener(`click`, function () {
-        addingToAd.style.display = `none`;
-      });
-    };
-    clousePins();
+    addingToAd.querySelector(`.popup__close`).addEventListener(`click`, function () {
+      addingToAd.remove();
+      removeHandler();
+    });
 
     document.addEventListener(`keydown`, function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
-        addingToAd.style.display = `none`;
+        addingToAd.remove();
+        removeHandler();
       }
     });
+
+    const removeHandler = function () {
+      document.removeEventListener(`keydown`, function (evt) {
+        if (evt.key === `Escape`) {
+          evt.preventDefault();
+          addingToAd.remove();
+        }
+      });
+    };
 
     return cardFragment;
   };

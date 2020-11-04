@@ -1,10 +1,9 @@
 'use strict';
 // модуль, который управляет карточками объявлений и метками:
 // добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
-const {addingNewElements} = window.card;
-const {itemDisplay} = window.data;
-
 (function () {
+  const {addingNewElements} = window.card;
+  const {itemDisplay} = window.data;
   // 2. создаем ДОМ элементы из этих пинов
   // Функция для создание DOM элемента из одного объекта объявления
   const clonedAds = function (newMapPin, template) {
@@ -29,7 +28,7 @@ const {itemDisplay} = window.data;
   // найдем шаблон
   const templateCard = document.querySelector(`#card`)
 .content
-.querySelector(`.popup`);
+ .querySelector(`.popup`);
 
   window.map = {
     clonedAds

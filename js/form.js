@@ -25,12 +25,8 @@
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinPositionX = pinMain.offsetTop;
   // const pinPositionY = pinMain.offsetLeft;
-
-  const setupAddress = function () {
-    const newPinY = pinPositionX + PIN_HEIGHT + INDEX_HEIGHT;
-    addressField.value = `${pinPositionX}, ${newPinY}`;
-  };
-  setupAddress();
+  const newPinY = pinPositionX + PIN_HEIGHT + INDEX_HEIGHT;
+  addressField.value = `${pinPositionX}, ${newPinY}`;
 
   // Непростая валидация
   const roomValueMap = {
@@ -60,7 +56,7 @@
   validationCheck();
 
   // Поле «Заголовок объявления».
-  const headline = document.getElementById(`title`);
+  const headline = openForm.querySelector(`#title`);
   headline.addEventListener(`change`, function () {
     const characterLength = headline.value.length;
 
@@ -75,7 +71,7 @@
   });
 
   // Поле «Тип жилья».
-  const housingPrice = document.getElementById(`price`);
+  const housingPrice = openForm.querySelector(`#price`);
   housingPrice.addEventListener(`change`, function () {
     const enteredCharacters = housingPrice.value;
 
@@ -87,9 +83,8 @@
     housingPrice.reportValidity();
   });
 
-  const typeHousing = document.getElementById(`type`);
-  const setsPrice = function () {
-
+  const typeHousing = openForm.querySelector(`#type`);
+  typeHousing.addEventListener(`change`, function () {
     if (typeHousing.value === `bungalow`) {
       housingPrice.setAttribute(`min`, `0`);
       housingPrice.setAttribute(`placeholder`, `0`);
@@ -103,16 +98,11 @@
       housingPrice.setAttribute(`min`, `10000`);
       housingPrice.setAttribute(`placeholder`, `10000`);
     }
-  };
-  setsPrice();
-
-  typeHousing.addEventListener(`change`, function () {
-    setsPrice();
   });
 
   // Поля «Время заезда», «Время выезда».
-  const timeOut = document.getElementById(`timeout`);
-  const timeIn = document.getElementById(`timein`);
+  const timeOut = openForm.querySelector(`#timeout`);
+  const timeIn = openForm.querySelector(`#timein`);
 
   const comparesCheckInTimes = function () {
     timeOut.value = timeIn.value;
@@ -127,17 +117,12 @@
   });
 
   // Значением полей «Ваша фотография» и «Фотография жилья» может быть только изображение.
-  const photoCheck = function () {
-    document.getElementById(`avatar`).setAttribute(`accept`, `image/png, image/jpeg`);
-    document.getElementById(`images`).setAttribute(`accept`, `image/png, image/jpeg`);
-  };
+  openForm.querySelector(`#avatar`).setAttribute(`accept`, `image/png, image/jpeg`);
+  openForm.querySelector(`#images`).setAttribute(`accept`, `image/png, image/jpeg`);
 
-  photoCheck();
 
   window.form = {
     validationCheck,
-    formElement,
-    openForm,
     numberOfRooms
   };
 })();
