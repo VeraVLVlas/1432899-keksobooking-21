@@ -3,11 +3,12 @@
 // добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
 (function () {
   const {addingNewElements} = window.card;
-  const {itemDisplay} = window.data;
+  const {weGenerateAds} = window.data;
   // 2. создаем ДОМ элементы из этих пинов
   // Функция для создание DOM элемента из одного объекта объявления
+  const map = document.querySelector(`.map`);
+
   const clonedAds = function (newMapPin, template) {
-    const map = document.querySelector(`.map`);
     const fragment = document.createDocumentFragment();
 
     newMapPin.forEach(function (pinClone) {
@@ -19,7 +20,7 @@
 
       clonElement.addEventListener(`click`, function () {
         const mapContainer = map.querySelector(`.map__filters-container`);
-        map.insertBefore(addingNewElements(itemDisplay[0], templateCard), mapContainer);
+        map.insertBefore(addingNewElements(weGenerateAds()[0], templateCard), mapContainer);
       });
     });
     return fragment;

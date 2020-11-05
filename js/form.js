@@ -20,7 +20,7 @@
   disabled(formElement);
   formPhoto.setAttribute(`disabled`, `disabled`);
 
-  // Заполнение поля адреса, костыльный вариант
+  // Заполнение поля адреса
   const addressField = openForm.querySelector(`#address`);
   const pinMain = document.querySelector(`.map__pin--main`);
   const pinPositionX = pinMain.offsetTop;

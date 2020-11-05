@@ -20,26 +20,16 @@
 
     addingToAd.querySelector(`.popup__close`).addEventListener(`click`, function () {
       addingToAd.remove();
-      removeHandler();
     });
 
-    document.addEventListener(`keydown`, function (evt) {
+    const eventHandler = function (evt) {
       if (evt.key === `Escape`) {
         evt.preventDefault();
         addingToAd.remove();
-        removeHandler();
       }
-    });
-
-    const removeHandler = function () {
-      document.removeEventListener(`keydown`, function (evt) {
-        if (evt.key === `Escape`) {
-          evt.preventDefault();
-          addingToAd.remove();
-        }
-      });
+      document.removeEventListener(`keydown`, eventHandler);
     };
-
+    document.addEventListener(`keydown`, eventHandler);
     return cardFragment;
   };
 

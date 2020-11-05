@@ -62,11 +62,9 @@
     }
     return addPins;
   };
-  // КАК ПЕРЕДЕЛАТЬ, ВОПР 3
-  const itemDisplay = weGenerateAds();
 
   window.data = {
-    itemDisplay
+    weGenerateAds
   };
 
 })();

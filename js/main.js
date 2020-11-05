@@ -2,7 +2,7 @@
 (function () {
 // объявление констант
   const {validationCheck} = window.form;
-  const {itemDisplay} = window.data;
+  const {weGenerateAds} = window.data;
   const {clonedAds} = window.map;
 
   // Нашли шаблон метки
@@ -41,7 +41,7 @@
     const section = document.querySelector(`.notice`);
     const openForm = section.querySelector(`form`);
     openForm.classList.remove(`ad-form--disabled`);
-    blockForDrawing.appendChild(clonedAds(itemDisplay, readyTemplatePin));
+    blockForDrawing.appendChild(clonedAds(weGenerateAds(), readyTemplatePin));
     openForm.querySelector(`#room_number`).addEventListener(`change`, function () {
       validationCheck();
     });
