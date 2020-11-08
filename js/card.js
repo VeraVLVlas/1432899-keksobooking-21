@@ -3,7 +3,7 @@
 
 (function () {
   // создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-  const addingNewElements = function (advt, pattern) {
+  const cardGeneration = function (advt, pattern) {
     const cardFragment = document.createDocumentFragment();
     const addingToAd = pattern.cloneNode(true);
     addingToAd.querySelector(`.popup__title`).textContent = `${advt.offer.title}`;
@@ -34,6 +34,6 @@
   };
 
   window.card = {
-    addingNewElements
+    cardGeneration
   };
 })();

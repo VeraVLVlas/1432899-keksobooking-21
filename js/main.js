@@ -15,19 +15,26 @@
 
   // добавьте обработчик события mousedown на элемент .map__pin--main
   const pinMain = document.querySelector(`.map__pin--main`);
-  pinMain.addEventListener(`mousedown`, function (evt) {
+
+  const activatingMapTheMouse = function (evt) {
     if (evt.button === 0) {
       activatePage();
     }
-  });
+    pinMain.removeEventListener(`mousedown`, activatingMapTheMouse);
+  };
+
+  pinMain.addEventListener(`mousedown`, activatingMapTheMouse);
 
   // перевод страницы в активный режим с клавиатуры: установить обработчик keydown для метки
   // и если пользователь нажал Enter — перевести страницу в активный режим.
-  pinMain.addEventListener(`keydown`, function (evt) {
+
+  const eventMainPin = function (evt) {
     if (evt.key === `Enter`) {
       activatePage();
     }
-  });
+    pinMain.removeEventListener(`keydown`, eventMainPin);
+  };
+  pinMain.addEventListener(`keydown`, eventMainPin);
 
   // функция для активации страницы в доступный режим
   const activatePage = function () {
