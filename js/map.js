@@ -3,7 +3,7 @@
 // добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
 (function () {
   const {cardGeneration} = window.card;
-  //  const {weGenerateAds} = window.data;
+
   // 2. создаем ДОМ элементы из этих пинов
   // Функция для создание DOM элемента из одного объекта объявления
   const map = document.querySelector(`.map`);
@@ -18,21 +18,21 @@
       clonPictures.src = `${pinClone.autor.avatar}`;
       fragment.appendChild(clonElement);
 
-      // остановилась здесь
-      function cardDrawing() {
+      clonElement.addEventListener(`click`, cardOpen);
+
+      const activatingMap = function () {
+        const card = map.querySelector(`.popup`);
+        if (card && clonElement === `click`) {
+          card.remove();
+          clonElement.removeEventListener(`click`, cardOpen);
+        }
+      };
+
+      function cardOpen() {
         const mapContainer = map.querySelector(`.map__filters-container`);
         map.insertBefore(cardGeneration(pinClone, templateCard), mapContainer);
+        activatingMap();
       }
-      // что здесь не так
-      const activatingMap = function (evt) {
-        if (evt.button === 0) {
-          clonElement.addEventListener(`mousedown`, cardDrawing);
-        }
-        clonElement.removeEventListener(`mousedown`, activatingMap);
-      //  const card = map.querySelector(`.map__card`);
-      //  card.remove();
-      };
-      activatingMap();
     });
     return fragment;
   };
