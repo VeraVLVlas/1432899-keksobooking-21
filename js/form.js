@@ -1,8 +1,6 @@
 'use strict';
 // модуль, который работает с формой объявления.
 (function () {
-  const PIN_HEIGHT = 65;
-  const INDEX_HEIGHT = 22;
   const MIN_NUMBER_SYMBOLS = 30;
   const MAX_NUMBER_SYMBOLS = 100;
   const MAX_PRICE = 1000000;
@@ -19,14 +17,6 @@
   const formElement = openForm.querySelectorAll(`fieldset`);
   disabled(formElement);
   formPhoto.setAttribute(`disabled`, `disabled`);
-
-  // Заполнение поля адреса
-  const addressField = openForm.querySelector(`#address`);
-  const pinMain = document.querySelector(`.map__pin--main`);
-  const pinPositionX = pinMain.offsetTop;
-  // const pinPositionY = pinMain.offsetLeft;
-  const newPinY = pinPositionX + PIN_HEIGHT + INDEX_HEIGHT;
-  addressField.value = `${pinPositionX}, ${newPinY}`;
 
   // Непростая валидация
   const roomValueMap = {

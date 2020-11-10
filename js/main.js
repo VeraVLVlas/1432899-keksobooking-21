@@ -53,4 +53,9 @@
       validationCheck();
     });
   };
+
+  window.main = {
+    activatePage
+  };
+
 })();
