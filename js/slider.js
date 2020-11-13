@@ -1,6 +1,6 @@
 'use strict';
-
-(() => {
+// модуль, который отвечает за перетаскивание главного пина по карте
+(function () {
   const PIN_WIDTH = 65;
   const PIN_HEIGHT = 65;
   const INDEX_HEIGHT = 22;
@@ -79,7 +79,7 @@
       recalculatesCoordinates();
     };
 
-    const onMouseUp = (upEvt) => {
+    const onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener(`mousemove`, onMouseMove);

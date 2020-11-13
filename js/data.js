@@ -1,6 +1,7 @@
 'use strict';
 // модуль, который создаёт данные;
 (function () {
+  /*
   const NUMBER_OF_ADS = 8;
   const TITLE_AUTHOR = [`Для большой компании`, `Горячее предложение`, `Лучшее место для Вас`, `Плюс тортик к чаю`, `С видом на море`, `Сдам со скидкой`, `Лучшее предложение`, `Просторная квартира`];
   const ADDRESS_AUTHOR = [`600,350`, `820,210`, `100,100`, `50,400`, `500,20`, `600,10`, `40,760`, `140,200`];
@@ -61,10 +62,28 @@
       addPins.push(generatedAd());
     }
     return addPins;
+  }; */
+
+  // ошибка при получении или отправке данных
+  const onError = function (errorMessage) {
+    const error = document.createElement(`div`);
+    error.style = `z-index: 100; margin: 0 auto; text-align: center`;
+    error.style.paddingTop = `20px`;
+    error.style.backgroundColor = `red`;
+    error.style.color = `black`;
+    error.style.position = `absolute`;
+    error.style.left = 0;
+    error.style.right = 0;
+    error.style.fontSize = `35px`;
+    error.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, error);
+    error.addEventListener(`click`, function () {
+      error.remove();
+    });
   };
 
   window.data = {
-    weGenerateAds
+    onError
   };
 
 })();

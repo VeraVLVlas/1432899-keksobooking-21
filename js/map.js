@@ -8,11 +8,12 @@
   // Функция для создание DOM элемента из одного объекта объявления
   const map = document.querySelector(`.map`);
 
-  const clonedAds = function (newMapPin, template) {
+  const clonedAds = function (newMapPin) {
     const fragment = document.createDocumentFragment();
+    const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
     newMapPin.forEach(function (pinClone) {
-      const clonElement = template.cloneNode(true);
+      const clonElement = pinTemplate.cloneNode(true);
       const clonPictures = clonElement.querySelector(`img`);
       clonElement.style = `left: ${pinClone.location.x}px; top: ${pinClone.location.y}px`;
       clonPictures.src = `${pinClone.autor.avatar}`;

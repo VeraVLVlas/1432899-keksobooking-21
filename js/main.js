@@ -2,14 +2,15 @@
 (function () {
 // объявление констант
   const {validationCheck} = window.form;
-  const {weGenerateAds} = window.data;
+  const {onError} = window.data;
   const {clonedAds} = window.map;
+  const {load} = window.test;
 
   // Нашли шаблон метки
-  const readyTemplatePin = document.querySelector(`#pin`)
-  .content
-  .querySelector(`.map__pin`);
-  const blockForDrawing = document.querySelector(`.map__pins`);
+  //  const readyTemplatePin = document.querySelector(`#pin`)
+  //  .content
+  //  .querySelector(`.map__pin`);
+  // const blockForDrawing = document.querySelector(`.map__pins`);
 
   const map = document.querySelector(`.map`);
 
@@ -48,11 +49,17 @@
     const section = document.querySelector(`.notice`);
     const openForm = section.querySelector(`form`);
     openForm.classList.remove(`ad-form--disabled`);
-    blockForDrawing.appendChild(clonedAds(weGenerateAds(), readyTemplatePin));
+    //  blockForDrawing.appendChild(clonedAds(weGenerateAds(), readyTemplatePin));
+    const onLoad = (data) => {
+      const adMapPins = document.querySelector(`.map__pins`);
+      adMapPins.append(clonedAds(data));
+    };
+    load(onLoad, onError);
     openForm.querySelector(`#room_number`).addEventListener(`change`, function () {
       validationCheck();
     });
   };
+
 
   window.main = {
     activatePage
